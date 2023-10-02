@@ -10,10 +10,12 @@ export default class Chat {
     if (process.env.NODE_ENV === 'development') {
       this.urlServer = 'localhost:3000';
       protocol = 'http';
+      this.ptotocolWS = 'ws';
     }
     else {
       this.urlServer = 'ahj-homeworks-sse-ws-chat-backend.onrender.com';
       protocol = 'https';
+      this.ptotocolWS = 'wss';
     }
     this.api = new ChatAPI(protocol, this.urlServer);
     this.ws = null;
@@ -46,7 +48,7 @@ export default class Chat {
       // this.renderUser(data.user);
 
       // open ws connection, params: url, callback fuction for getting message
-      this.ws = new WS(`ws://${this.urlServer}/ws`, this.onGetMessage);
+      this.ws = new WS(`${this.ptotocolWS}://${this.urlServer}/ws`, this.onGetMessage);
       this.ws.addListeners();
     }
   }
