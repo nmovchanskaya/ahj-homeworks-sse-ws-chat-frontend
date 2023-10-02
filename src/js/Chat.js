@@ -1,6 +1,6 @@
-import ChatAPI from "./api/ChatAPI";
-import Modal from "./Modal";
-import WS from "./api/WS";
+import ChatAPI from './api/ChatAPI';
+import Modal from './Modal';
+import WS from './api/WS';
 
 export default class Chat {
   constructor(container) {
@@ -33,7 +33,7 @@ export default class Chat {
 
       // add user to list of users
       this.currentUser = data.user;
-      //this.renderUser(data.user);
+      // this.renderUser(data.user);
 
       // open ws connection, params: url, callback fuction for getting message
       this.ws = new WS('ws://localhost:3000/ws', this.onGetMessage);
@@ -43,33 +43,31 @@ export default class Chat {
 
   onGetMessage(e) {
     console.log(e);
-    
+
     const data = JSON.parse(e.data);
-    //console.log(data);
-    //if message - add new
+    // console.log(data);
+    // if message - add new
     if (Object.keys(data).indexOf('text') > -1) {
       this.renderMessage(data);
-    }
-    else {
-      //if list of users - refresh it
+    } else {
+      // if list of users - refresh it
       this.clearUsers();
-      data.forEach(item => {
+      data.forEach((item) => {
         this.renderUser(item);
       });
     }
-    
+
     console.log('ws message');
   }
 
   onModalSubmit(e) {
     e.preventDefault();
-    
+
     const nick = this.modal.modalInput.value.trim();
     if (nick) {
-      //create new User
-      this.api.create({name: nick}, this.onNewUserAdded);
-    }
-    else {
+      // create new User
+      this.api.create({ name: nick }, this.onNewUserAdded);
+    } else {
       this.modal.renderMessage('Input your nickname');
     }
   }
@@ -99,26 +97,25 @@ export default class Chat {
       text: this.messageInput.value,
       user: this.currentUser.name,
       date: Date.now(),
-      type: 'send'
+      type: 'send',
     };
-    
+
     if (!message) return;
-    
+
     this.ws.send(JSON.stringify(message));
-    
+
     this.messageInput.value = '';
   }
 
   renderMessage(message) {
     let messageClass;
     let user;
-    let date = new Date(message.date);
+    const date = new Date(message.date);
 
     if (message.user === this.currentUser.name) {
       messageClass = 'message__container-yourself';
       user = 'You';
-    }
-    else {
+    } else {
       messageClass = 'message__container-interlocutor';
       user = message.user;
     }
@@ -159,7 +156,7 @@ export default class Chat {
   onLogout() {
     const message = {
       user: this.currentUser,
-      type: 'exit'
+      type: 'exit',
     };
 
     this.ws.send(JSON.stringify(message));
