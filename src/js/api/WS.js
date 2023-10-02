@@ -1,7 +1,6 @@
 export default class WS {
   constructor(url, onGetMessage) {
     this.ws = new WebSocket(url);
-    // this.ws = new WebSocket('ws://localhost:3000/ws');
     this.onGetMessage = onGetMessage;
   }
 

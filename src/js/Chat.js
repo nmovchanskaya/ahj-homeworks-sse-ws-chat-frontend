@@ -5,7 +5,17 @@ import WS from './api/WS';
 export default class Chat {
   constructor(container) {
     this.container = container;
-    this.api = new ChatAPI();
+
+    let protocol;
+    if (process.env.NODE_ENV === 'development') {
+      this.urlServer = 'localhost:3000';
+      protocol = 'http';
+    }
+    else {
+      this.urlServer = 'ahj-homeworks-sse-ws-chat-backend.onrender.com';
+      protocol = 'https';
+    }
+    this.api = new ChatAPI(protocol, this.urlServer);
     this.ws = null;
 
     this.onModalSubmit = this.onModalSubmit.bind(this);
@@ -36,7 +46,7 @@ export default class Chat {
       // this.renderUser(data.user);
 
       // open ws connection, params: url, callback fuction for getting message
-      this.ws = new WS('ws://localhost:3000/ws', this.onGetMessage);
+      this.ws = new WS(`ws://${this.urlServer}/ws`, this.onGetMessage);
       this.ws.addListeners();
     }
   }

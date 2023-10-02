@@ -1,7 +1,7 @@
 const createRequest = async (options = {
-  sendMethod, method, id, data, callback,
+  url, sendMethod, method, id, data, callback,
 }) => {
-  const strRequest = `http://localhost:3000/${options.method}`;
+  const strRequest = `${options.url}/${options.method}`;
 
   if (options.sendMethod === 'POST') {
     fetch(strRequest, {
